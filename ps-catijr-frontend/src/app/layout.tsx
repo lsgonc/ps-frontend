@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header";
+
+
 
 const poppinsFont = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -24,7 +27,17 @@ export default function RootLayout({
       <body
         className={`${poppinsFont.variable} antialiased`}
       >
-        {children}
+        <div className="min-h-screen flex flex-col justify-bewteen">
+          <div className="sm:block hidden">
+            <Header></Header>
+          </div>
+          <section className="flex-grow">
+            {children}
+          </section>
+          <div className="sm:hidden block">
+            <Header></Header>
+          </div>
+        </div>
       </body>
     </html>
   );
