@@ -6,6 +6,7 @@ import { BsBellFill } from "react-icons/bs"
 import { MdAccountCircle } from "react-icons/md"
 import { IoMdHome } from "react-icons/io";
 import { IoMdPerson } from "react-icons/io";
+import ProfileButton from "./ProfileButton";
 
 
 export default function Header()
@@ -19,10 +20,7 @@ export default function Header()
             
             <div className="flex gap-6 items-center">
                 <BsBellFill className="cursor-pointer color-blue font-semibold" color="white" size={28} />
-                <div className="flex gap-2 items-center">
-                    <MdAccountCircle className="cursor-pointer" color="white" size={36}  />
-                    <h3 className="text-white">Lucas</h3>
-                </div>
+                <ProfileButton></ProfileButton>
             </div>
         </div>
 

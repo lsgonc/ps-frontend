@@ -15,6 +15,7 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         headerbordercolor: "var(--header-border-color)",
+        hoverbgcolor: "var(--hover-bg-color)"
       },
     },
   },
