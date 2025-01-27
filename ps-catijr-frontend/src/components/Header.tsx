@@ -7,6 +7,7 @@ import { MdAccountCircle } from "react-icons/md"
 import { IoMdHome } from "react-icons/io";
 import { IoMdPerson } from "react-icons/io";
 import ProfileButton from "./ProfileButton";
+import NotificationButton from "./NotificationButton";
 
 
 export default function Header()
@@ -19,7 +20,7 @@ export default function Header()
             </div>
             
             <div className="flex gap-6 items-center">
-                <BsBellFill className="cursor-pointer color-blue font-semibold" color="white" size={28} />
+                <NotificationButton HasNotification={true}></NotificationButton>
                 <ProfileButton></ProfileButton>
             </div>
         </div>
