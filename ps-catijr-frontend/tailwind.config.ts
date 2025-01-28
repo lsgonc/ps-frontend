@@ -9,7 +9,8 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        'header-gradient': 'linear-gradient(90deg, #5b5b5b 0%, #4c4444 100%)'
+        'header-gradient': 'linear-gradient(90deg, #5b5b5b 0%, #4c4444 100%)',
+        'taskcard-hover-gradient': 'linear-gradient(258.85deg, #232323 0.2%, #393939 99.8%)'
       },
       colors: {
         background: "var(--background)",
