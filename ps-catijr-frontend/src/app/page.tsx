@@ -14,7 +14,7 @@ export default function Home() {
       <ListOptionsButton></ListOptionsButton>
       <FinishTaskButton state="default"></FinishTaskButton>
       <DropdownItem type="danger"></DropdownItem>
-      <PriorityTag type="super-high"></PriorityTag>
+      <PriorityTag priority="super-high"></PriorityTag>
     </div>
   );
 }
