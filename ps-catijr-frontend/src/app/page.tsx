@@ -4,6 +4,7 @@ import FinishTaskButton from "@/components/FinishTaskButton";
 import Header from "@/components/Header";
 import ListOptionsButton from "@/components/ListOptionsButton";
 import NewTaskButton from "@/components/NewTaskButton";
+import PriorityTag from "@/components/PriorityTag";
 import Image from "next/image";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <ListOptionsButton></ListOptionsButton>
       <FinishTaskButton state="default"></FinishTaskButton>
       <DropdownItem type="danger"></DropdownItem>
+      <PriorityTag type="super-high"></PriorityTag>
     </div>
   );
 }

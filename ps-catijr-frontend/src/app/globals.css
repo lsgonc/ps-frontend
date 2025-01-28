@@ -10,6 +10,10 @@
   --clicked-bg-color: #343333;
   --hover-bg-green: #15C384;
   --danger: #AF0505;
+  --low-priority-bg: #46F7B7;
+  --medium-priority-bg: #F5EB88;
+  --high-priority-bg: #FFA775;
+  --super-high-priority-bg: #F27F77;
 }
 
 

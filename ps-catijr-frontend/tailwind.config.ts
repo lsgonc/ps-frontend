@@ -18,7 +18,11 @@ export default {
         hoverbgcolor: "var(--hover-bg-color)",
         clickedbgcolor: "var(--clicked-bg-color)",
         hoverbggreen: "var(--hover-bg-green)",
-        danger: "var(--danger)"
+        danger: "var(--danger)",
+        lowpriority: "var(--low-priority-bg)",
+        mediumpriority: "var(--medium-priority-bg)",
+        highpriority: "var(--high-priority-bg)",
+        superhighpriority: "var(--super-high-priority-bg)"
       },
     },
   },
