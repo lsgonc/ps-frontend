@@ -16,7 +16,8 @@ export default {
         foreground: "var(--foreground)",
         headerbordercolor: "var(--header-border-color)",
         hoverbgcolor: "var(--hover-bg-color)",
-        clickedbgcolor: "var(--clicked-bg-color)"
+        clickedbgcolor: "var(--clicked-bg-color)",
+        hoverbggreen: "var(--hover-bg-green)"
       },
     },
   },

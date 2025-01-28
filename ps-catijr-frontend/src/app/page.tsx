@@ -1,4 +1,5 @@
 import CloseTaskButton from "@/components/CloseTaskButton";
+import FinishTaskButton from "@/components/FinishTaskButton";
 import Header from "@/components/Header";
 import ListOptionsButton from "@/components/ListOptionsButton";
 import NewTaskButton from "@/components/NewTaskButton";
@@ -9,6 +10,7 @@ export default function Home() {
     <div className="flex">
       <NewTaskButton></NewTaskButton>
       <ListOptionsButton></ListOptionsButton>
+      <FinishTaskButton state="default"></FinishTaskButton>
     </div>
   );
 }
