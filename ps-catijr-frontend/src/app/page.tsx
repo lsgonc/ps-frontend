@@ -1,4 +1,5 @@
 import CloseTaskButton from "@/components/CloseTaskButton";
+import DropdownItem from "@/components/DropdownItem";
 import FinishTaskButton from "@/components/FinishTaskButton";
 import Header from "@/components/Header";
 import ListOptionsButton from "@/components/ListOptionsButton";
@@ -11,6 +12,7 @@ export default function Home() {
       <NewTaskButton></NewTaskButton>
       <ListOptionsButton></ListOptionsButton>
       <FinishTaskButton state="default"></FinishTaskButton>
+      <DropdownItem type="danger"></DropdownItem>
     </div>
   );
 }
