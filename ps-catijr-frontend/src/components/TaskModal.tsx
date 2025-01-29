@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { BsCalendarWeekFill } from "react-icons/bs";
 import CloseTaskButton from "./CloseTaskButton";
@@ -29,6 +27,9 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
   const [priority, setPriority] = useState(initialData?.priority || "medium");
   const [finishAt, setFinishAt] = useState(initialData?.finishAt || "2024-12-31");
   const [editingField, setEditingField] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   useEffect(() => {
     if (initialData) {
@@ -38,6 +39,49 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
       setFinishAt(initialData.finishAt);
     }
   }, [initialData]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files ? e.target.files[0] : null;
+    if (selectedFile && selectedFile.size <= 100 * 1024 * 1024) { // 100MB limit
+      setFile(selectedFile);
+      setUploadError(null);
+    } else {
+      setUploadError("O arquivo deve ter no máximo 100MB.");
+    }
+  };
+
+  const handleFileUpload = async () => {
+    if (!file || uploading) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      setUploading(true);
+      setUploadError(null);
+
+      const response = await fetch(`http://localhost:3333/tasks/${initialData?.id}/files`, {
+        method: "POST",
+        body: formData,
+      });
+
+
+      if (response.ok) {
+        // Handle successful upload (e.g., update state or show success message)
+        const result = await response.json();
+        console.log(result)
+        console.log("File uploaded successfully:", result);
+      } else {
+        const error = await response.json();
+        console.log(error)
+        setUploadError(error.message || "Erro ao enviar o arquivo.");
+      }
+    } catch (err) {
+      setUploadError("Erro ao enviar o arquivo.");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -131,6 +175,25 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
             </p>
           </div>
         )}
+
+        {/* File Upload Section */}
+        <hr className="my-6 border-[#4E4E4E]" />
+        <div className="flex flex-col items-start">
+          <h3 className="font-semibold text-2xl mb-3">Upload de Arquivo</h3>
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="mb-3 p-2 text-white bg-transparent border border-[#4E4E4E] rounded-md"
+          />
+          {uploadError && <p className="text-red-500 text-sm">{uploadError}</p>}
+          <button
+            onClick={handleFileUpload}
+            disabled={uploading || !file}
+            className={`mt-3 p-2 bg-blue-500 text-white rounded-md ${uploading && "opacity-50"}`}
+          >
+            {uploading ? "Enviando..." : "Enviar Arquivo"}
+          </button>
+        </div>
       </div>
     </div>
   );
