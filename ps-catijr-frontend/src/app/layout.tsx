@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
-
+import Notification from "@/components/Notification";
 
 
 const poppinsFont = Poppins({
@@ -28,6 +28,7 @@ export default function RootLayout({
         className={`${poppinsFont.variable} antialiased`}
       >
         <div className="min-h-screen flex flex-col justify-bewteen">
+          <Notification /> {/* Render the notification globally */}
           <div className="sm:block hidden">
             <Header></Header>
           </div>

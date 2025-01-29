@@ -5,12 +5,13 @@ import PriorityTag from "./PriorityTag"
 import { BsCalendarWeekFill, BsFillCalendarWeekFill } from "react-icons/bs"
 import { AiOutlinePaperClip } from "react-icons/ai"
 import { useState, useEffect } from "react"
-
+import Notification from "./Notification"
 import { BsPencilFill } from "react-icons/bs"
 import { BsPlusSquareDotted } from "react-icons/bs"
 import { AiFillDelete } from "react-icons/ai"
 import { mutate } from "swr"
 import TaskModal, { TaskData } from "./TaskModal"
+import useNotificationStore from "@/store/notificationStore"
 
 interface Props {
     date: "onTime" | "late"
@@ -30,7 +31,7 @@ export default function TaskCard({ date,priority,title,description,taskDate, isF
         x: 0,
         y: 0,
     });
-    const [notification, setNotification] = useState<string | null>(null); // State for notification message
+    const { showNotification } = useNotificationStore();
 
     useEffect(() => {
         const handleClick = () => setClicked(false);
@@ -78,7 +79,6 @@ export default function TaskCard({ date,priority,title,description,taskDate, isF
 
       const handleUpdateTask = async (task: TaskData) => {   
 
-        console.log(task)
         try {
           // Call the API to create the list
           const response = await fetch(`http://localhost:3333/tasks/${taskId}`, {
@@ -95,11 +95,9 @@ export default function TaskCard({ date,priority,title,description,taskDate, isF
           });
     
           if (!response.ok) {
-            console.log(response.json())
             throw new Error("Failed to update the task");
           }
     
-          console.log("Task updated successfully!");
           mutate("http://localhost:3333/tasks");
         } catch (error) {
           console.error("Error updating task:", error);
@@ -117,13 +115,9 @@ export default function TaskCard({ date,priority,title,description,taskDate, isF
             throw new Error("Failed to delete the task");
           }
           
-          setNotification("Task deletada com sucesso!"); // Show success message
-          mutate("http://localhost:3333/tasks");
-        // Automatically hide the notification after 3 seconds
-        setTimeout(() => {
-            setNotification(null);
-        }, 3000);    
+          showNotification("Task deletada com sucesso!");
           // Mutate SWR cache to refresh data
+          mutate("http://localhost:3333/tasks");  
         } catch (error) {
           console.error("Task deleting list:", error);
         }
@@ -137,7 +131,7 @@ export default function TaskCard({ date,priority,title,description,taskDate, isF
             x: e.pageX,
             y: e.pageY,
         })
-    }} className="flex relative flex-col gap-2 border border-white py-[12px] px-[8px] max-w-[460px] hover:bg-taskcard-hover-gradient">
+    }} className="flex relative flex-col gap-2 border border-white py-[12px] px-[8px] max-w-[460px] hover:bg-taskcard-hover-gradient">        
         <div className="flex justify-between">
             <PriorityTag priority={priority}></PriorityTag>
             <FinishTaskButton onFinish={handleFinishTask} state={taskIsFinished ? "finished" : "default"}></FinishTaskButton>
@@ -165,24 +159,6 @@ export default function TaskCard({ date,priority,title,description,taskDate, isF
             <li className="flex gap-2 items-center p-1 cursor-pointer hover:bg-hoverbgcolor"><BsPlusSquareDotted></BsPlusSquareDotted> Duplicar</li>
             <li onClick={handleDeleteTask} className="flex gap-2 items-center text-danger p-1 cursor-pointer hover:bg-hoverbgcolor"><AiFillDelete></AiFillDelete> Deletar</li>
           </ul>
-        </div>
-      )}
-
-      {/* Notification div */}
-      {notification && (
-        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-[#4E4E4E] text-[#029008] py-1 px-4 rounded-xl flex items-center gap-6 border">
-          <div className="w-6 h-6 flex items-center justify-center bg-green-500 rounded-full text-black">
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-        </svg>
-      </div>
-          <span>{notification}</span>
-          <button
-            onClick={() => setNotification(null)}
-            className="bg-transparent font-bold"
-          >
-            X
-          </button>
         </div>
       )}
 

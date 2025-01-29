@@ -1,5 +1,6 @@
 "use client";
 
+import useNotificationStore from "@/store/notificationStore";
 import { useState } from "react";
 import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
 import { BsPencilFill, BsThreeDots } from "react-icons/bs";
@@ -8,6 +9,9 @@ import { mutate } from "swr";
 export default function ListOptionsButton({ onRename, id, listName }: any) {
   const [clicked, setClicked] = useState(false);
   const [showModal, setShowModal] = useState(false);
+
+  const { showNotification } = useNotificationStore();
+
 
   const deleteList = async () => {
     try {
@@ -20,7 +24,7 @@ export default function ListOptionsButton({ onRename, id, listName }: any) {
         throw new Error("Failed to delete the list");
       }
 
-      console.log("List deleted successfully!");
+      showNotification("Lista deletada com sucesso!")
       setShowModal(false);
 
       // Mutate SWR cache to refresh data
