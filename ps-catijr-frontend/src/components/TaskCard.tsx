@@ -10,6 +10,7 @@ import { BsPencilFill } from "react-icons/bs"
 import { BsPlusSquareDotted } from "react-icons/bs"
 import { AiFillDelete } from "react-icons/ai"
 import { mutate } from "swr"
+import TaskModal, { TaskData } from "./TaskModal"
 
 interface Props {
     date: "onTime" | "late"
@@ -24,6 +25,7 @@ interface Props {
 
 export default function TaskCard({ date,priority,title,description,taskDate, isFinished, id, listId }: Props) {
     const [clicked, setClicked] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [points, setPoints] = useState({
         x: 0,
         y: 0,
@@ -72,6 +74,56 @@ export default function TaskCard({ date,priority,title,description,taskDate, isF
         }
       };
 
+      const handleUpdateTask = async (task: TaskData) => {   
+
+        console.log(task)
+        try {
+          // Call the API to create the list
+          const response = await fetch(`http://localhost:3333/tasks/${taskId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                title: task.title,
+                description: task.description,
+                priority: task.priority,
+                finishAt: new Date(task.finishAt),
+                listId: task.listId,
+                isFinished: taskIsFinished
+              }),
+          });
+    
+          if (!response.ok) {
+            console.log(response.json())
+            throw new Error("Failed to update the task");
+          }
+    
+          console.log("Task updated successfully!");
+          mutate("http://localhost:3333/tasks");
+        } catch (error) {
+          console.error("Error updating task:", error);
+        }
+      };
+
+      const handleDeleteTask = async () => {
+        try {
+          const response = await fetch(`http://localhost:3333/tasks/${taskId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+          });
+    
+          if (!response.ok) {
+            throw new Error("Failed to delete the task");
+          }
+    
+          console.log("Task deleted successfully!");
+    
+          // Mutate SWR cache to refresh data
+          mutate("http://localhost:3333/tasks");
+        } catch (error) {
+          console.error("Task deleting list:", error);
+        }
+      };
+
 
     return <div onContextMenu={(e) => {
         e.preventDefault();
@@ -100,14 +152,17 @@ export default function TaskCard({ date,priority,title,description,taskDate, isF
             </div>
         </div>
 
-        {clicked && (
+        {clicked && !taskIsFinished && (
         <div className="absolute bg-[#252628] text-white py-[8px] px-[4px] border border-[#4E4E4E] bottom-[-15] right-[-15]">
           <ul className="flex flex-col gap-2">
-            <li className="flex gap-2 items-center p-1 cursor-pointer hover:bg-hoverbgcolor"><BsPencilFill></BsPencilFill> Editar</li>
+            <li onClick={() => setIsOpen(true)} className="flex gap-2 items-center p-1 cursor-pointer hover:bg-hoverbgcolor"><BsPencilFill></BsPencilFill> Editar</li>
             <li className="flex gap-2 items-center p-1 cursor-pointer hover:bg-hoverbgcolor"><BsPlusSquareDotted></BsPlusSquareDotted> Duplicar</li>
-            <li className="flex gap-2 items-center text-danger p-1 cursor-pointer hover:bg-hoverbgcolor"><AiFillDelete></AiFillDelete> Deletar</li>
+            <li onClick={handleDeleteTask} className="flex gap-2 items-center text-danger p-1 cursor-pointer hover:bg-hoverbgcolor"><AiFillDelete></AiFillDelete> Deletar</li>
           </ul>
         </div>
       )}
+
+    <TaskModal isOpen={isOpen} onClose={() => setIsOpen(false)} onSave={handleUpdateTask} initialData={{ id:taskId, title: taskTitle, description: taskDesc, priority: taskPriority, finishAt: new Date(tDate).toString(), listId: lId }} />
+        
     </div>
 }
