@@ -73,7 +73,7 @@ export default function Home() {
 
   return (
     <div className="sm:px-[80px] px-[10px] text-white">
-      <div className="flex max-md:flex-col gap-2 overflow-y-auto md:overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 h-screen">
+      <div className="flex max-md:flex-col gap-2 overflow-y-auto md:overflow-x-auto  h-screen">
         {lists.map((list: any) => (
           <div
             key={list.id}

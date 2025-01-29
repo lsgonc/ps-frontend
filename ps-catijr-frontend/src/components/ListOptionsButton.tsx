@@ -43,7 +43,7 @@ export default function ListOptionsButton({ onRename, id, listName }: any) {
         <BsThreeDots color="white" size={28} />
       </div>
       {clicked && (
-        <div className="absolute bg-[#252628] text-white py-2 px-4 border border-[#4E4E4E] top-[50px] left-[0px] rounded-md z-10">
+        <div className="absolute bg-[#252628] text-white py-2 px-4 w-fit border border-[#4E4E4E] md:left-0 right-0   rounded-md z-10">
           <ul className="flex flex-col gap-2">
             <li
               className="flex gap-2 items-center p-1 cursor-pointer hover:bg-hoverbgcolor"

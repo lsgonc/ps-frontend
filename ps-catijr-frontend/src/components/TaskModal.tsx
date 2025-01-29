@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { BsCalendarWeekFill, BsPlusCircleFill } from "react-icons/bs";
+import { BsCalendarWeekFill, BsFillXCircleFill, BsPlusCircleFill } from "react-icons/bs";
 import CloseTaskButton from "./CloseTaskButton";
 import FinishTaskButton from "./FinishTaskButton";
 import PriorityDropdown from "./PriorityDropdown";
-import { mutate } from "swr";
+import { AiOutlinePaperClip } from "react-icons/ai";
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -21,6 +21,12 @@ export interface TaskData {
   listId: string;
 }
 
+interface FileData {
+  id: string;
+  name: string;
+  url: string;
+}
+
 export default function TaskModal({ isOpen, onClose, onSave, initialData }: TaskModalProps) {
   const [title, setTitle] = useState(initialData?.title || "Nova Tarefa");
   const [description, setDescription] = useState(initialData?.description || "Descrição da tarefa");
@@ -30,6 +36,7 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [attachedFiles, setAttachedFiles] = useState<FileData[]>([]);
 
   useEffect(() => {
     if (initialData) {
@@ -37,22 +44,42 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
       setDescription(initialData.description);
       setPriority(initialData.priority);
       setFinishAt(initialData.finishAt);
+      fetchAttachedFiles(initialData.id);
     }
   }, [initialData]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const fetchAttachedFiles = async (taskId?: string) => {
+    if (!taskId) return;
+
+    try {
+      const response = await fetch(`http://localhost:3333/tasks/${taskId}/files`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Fetched files:", data);
+        // Ensure files is always an array
+        const files = Array.isArray(data) ? data : data.files || [];
+        setAttachedFiles(files);
+      } else {
+        console.error("Failed to fetch attached files");
+      }
+    } catch (err) {
+      console.error("Error fetching attached files:", err);
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files ? e.target.files[0] : null;
     if (selectedFile && selectedFile.size <= 100 * 1024 * 1024) { // 100MB limit
       setFile(selectedFile);
       setUploadError(null);
-      handleFileUpload();
+      await handleFileUpload(selectedFile); // Automatically upload the file
     } else {
       setUploadError("O arquivo deve ter no máximo 100MB.");
     }
   };
 
-  const handleFileUpload = async () => {
-    if (!file || uploading) return;
+  const handleFileUpload = async (file: File) => {
+    if (!file || uploading || !initialData?.id) return;
 
     const formData = new FormData();
     formData.append("file", file);
@@ -61,20 +88,17 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
       setUploading(true);
       setUploadError(null);
 
-      const response = await fetch(`http://localhost:3333/tasks/${initialData?.id}/files`, {
+      const response = await fetch(`http://localhost:3333/tasks/${initialData.id}/files`, {
         method: "POST",
         body: formData,
       });
 
-
       if (response.ok) {
-        // Handle successful upload (e.g., update state or show success message)
         const result = await response.json();
-        console.log(result)
         console.log("File uploaded successfully:", result);
+        fetchAttachedFiles(initialData.id); // Refresh the list of attached files
       } else {
         const error = await response.json();
-        console.log(error)
         setUploadError(error.message || "Erro ao enviar o arquivo.");
       }
     } catch (err) {
@@ -84,10 +108,40 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
     }
   };
 
+  function truncate(input: string) {
+    if (input.length > 15) {
+       return input.substring(0, 15) + '...';
+    }
+    return input;
+ };
+
+ const handleDeleteFile = async (fileId: string) => {
+    if (!initialData?.id) return;
+  
+    try {
+      const response = await fetch(
+        `http://localhost:3333/tasks/${initialData.id}/files/${fileId}`,
+        {
+          method: "DELETE",
+        },
+      );
+  
+      if (response.ok) {
+        // Refresh the list of attached files
+        fetchAttachedFiles(initialData.id);
+      } else {
+        console.error("Failed to delete file");
+      }
+    } catch (err) {
+      console.error("Error deleting file:", err);
+    }
+  };
+
   if (!isOpen) return null;
 
+
   return (
-    <div className="fixed inset-0 z-10 flex justify-end bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-10 flex justify-end bg-black bg-opacity-50 cursor-default">
       <div className="w-[608px] border-l bg-background p-6 h-screen overflow-y-auto shadow-lg custom-scrollbar">
         <div className="flex justify-between mb-6">
           <CloseTaskButton onClose={onClose} />
@@ -180,24 +234,61 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
         {/* File Upload Section */}
         <hr className="my-6 border-[#4E4E4E]" />
         <div className="flex flex-col items-start">
-          <h3 className="font-semibold text-2xl mb-3">Upload de Arquivo</h3>
-          <label className="mb-3 p-1 gap-2 flex items-center text-white bg-transparent border border-[#4E4E4E] rounded-md">
-            <BsPlusCircleFill></BsPlusCircleFill>
-            Adicionar arquivo
-          <input
-            type="file"
-            onChange={handleFileChange}
-            className="hidden w-fit"
-          />
-          </label>
-          {uploadError && <p className="text-red-500 text-sm">{uploadError}</p>}
-          <button
-            onClick={handleFileUpload}
-            disabled={uploading || !file}
-            className={`mt-3 p-2 bg-blue-500 text-white rounded-md ${uploading && "opacity-50"}`}
-          >
-            {uploading ? "Enviando..." : "Enviar Arquivo"}
-          </button>
+          <h3 className="font-semibold text-2xl mb-3">Arquivos</h3>
+          <div className="flex">
+          {/* Display Attached Files */}
+            {attachedFiles.length > 0 ? (
+                <div className="flex cursor-pointer flex-wrap gap-4 h-3/4">
+                {attachedFiles.map((file) => (
+                    <div key={file.id} className="flex mb-3 p-1 items-center gap-2  h-full text-white bg-transparent border border-[#4E4E4E] rounded-md">
+                        <AiOutlinePaperClip size={24}></AiOutlinePaperClip>
+                        <a
+                        href={"http://localhost:3333/files/" + file.id}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className=""
+                        >
+                        {truncate(file.name)}
+                        </a>
+                        <BsFillXCircleFill onClick={async () => handleDeleteFile(file.id)} size={20}></BsFillXCircleFill>
+                    </div>
+                ))}
+
+                <label className="mb-3 p-1 cursor-pointer gap-2 flex items-center text-white bg-transparent border border-[#4E4E4E] rounded-md">
+                            <BsPlusCircleFill size={20}></BsPlusCircleFill>
+                            Adicionar arquivo
+                            <input
+                            type="file"
+                            onChange={handleFileChange}
+                            className="hidden w-fit"
+                            disabled={uploading}
+                            />
+                        </label>
+                        {uploadError && <p className="text-red-500 text-sm">{uploadError}</p>}
+                        {uploading && <p className="text-gray-500">Enviando arquivo...</p>}
+                </div>
+            ) : (initialData?.id ? (
+                <div>
+                <label className="mb-3 p-1 gap-2 cursor-pointer flex items-center text-white bg-transparent border border-[#4E4E4E] rounded-md">
+                            <BsPlusCircleFill></BsPlusCircleFill>
+                            Adicionar arquivo
+                            <input
+                            type="file"
+                            onChange={handleFileChange}
+                            className="hidden w-fit"
+                            disabled={uploading}
+                            />
+                        </label>
+                        {uploadError && <p className="text-red-500 text-sm">{uploadError}</p>}
+                        {uploading && <p className="text-gray-500">Enviando arquivo...</p>}
+                </div>)
+                : 
+                (<h3>Crie a lista antes de adicionar arquivos a ela</h3>)
+            )}
+            </div>
+          
+
+          
         </div>
       </div>
     </div>
