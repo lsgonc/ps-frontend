@@ -31,7 +31,6 @@ export default function ListTitle({listTitle, listId} : Props) {
         throw new Error("Failed to upload the list");
       }
 
-      console.log("List updated successfully!");
       setIsEditing(false); // Switch back to the button
       mutate("http://localhost:3333/lists");
     } catch (error) {

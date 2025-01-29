@@ -23,7 +23,6 @@ export default function NewListButton() {
         throw new Error("Failed to create the list");
       }
 
-      console.log("List created successfully!");
       setInputValue(""); // Clear the input
       setIsEditing(false); // Switch back to the button
 
