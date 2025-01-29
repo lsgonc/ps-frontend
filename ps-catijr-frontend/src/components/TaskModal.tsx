@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BsCalendarWeekFill } from "react-icons/bs";
+import { BsCalendarWeekFill, BsPlusCircleFill } from "react-icons/bs";
 import CloseTaskButton from "./CloseTaskButton";
 import FinishTaskButton from "./FinishTaskButton";
 import PriorityDropdown from "./PriorityDropdown";
@@ -45,6 +45,7 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
     if (selectedFile && selectedFile.size <= 100 * 1024 * 1024) { // 100MB limit
       setFile(selectedFile);
       setUploadError(null);
+      handleFileUpload();
     } else {
       setUploadError("O arquivo deve ter no máximo 100MB.");
     }
@@ -180,11 +181,15 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
         <hr className="my-6 border-[#4E4E4E]" />
         <div className="flex flex-col items-start">
           <h3 className="font-semibold text-2xl mb-3">Upload de Arquivo</h3>
+          <label className="mb-3 p-1 gap-2 flex items-center text-white bg-transparent border border-[#4E4E4E] rounded-md">
+            <BsPlusCircleFill></BsPlusCircleFill>
+            Adicionar arquivo
           <input
             type="file"
             onChange={handleFileChange}
-            className="mb-3 p-2 text-white bg-transparent border border-[#4E4E4E] rounded-md"
+            className="hidden w-fit"
           />
+          </label>
           {uploadError && <p className="text-red-500 text-sm">{uploadError}</p>}
           <button
             onClick={handleFileUpload}
