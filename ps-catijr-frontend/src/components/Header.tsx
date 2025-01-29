@@ -25,7 +25,7 @@ export default function Header()
             </div>
         </div>
 
-        <div className="mobile-header sm:hidden">
+        <div className="mobile-header sm:hidden max-sm:sticky">
             <div className="flex gap-6 items-center justify-between">
                 <IoMdHome className="cursor-pointer" size={36} color="white" />
                 <BsBellFill className="cursor-pointer color-blue font-semibold" color="white" size={28} />

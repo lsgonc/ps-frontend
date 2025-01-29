@@ -79,7 +79,7 @@ export default function Home() {
             key={list.id}
             onDrop={(e) => handleDrop(e, list.id)}
             onDragOver={handleDragOver}
-            className="flex flex-col h-fit gap-4 border border-[#4E4E4E] pt-[16px] px-[16px] pb-[24px] rounded-md min-w-[460px]"
+            className="flex flex-col h-fit gap-4 border border-[#4E4E4E] pt-[16px] px-[16px] pb-[24px] rounded-md md:min-w-[460px] sm:min-w-400"
           >
             <ListTitle listId={list.id} listTitle={list.title} />
 
