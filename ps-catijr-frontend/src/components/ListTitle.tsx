@@ -48,7 +48,7 @@ export default function ListTitle({listTitle, listId} : Props) {
   };
 
   return (
-    <div className={`flex relative text-white justify-between min-w-[445px]  items-center h-fit ${isEditing ? "border border-white rounded-md" : ""}`}>
+    <div className={`flex relative text-white justify-between min-w-full tems-center h-fit ${isEditing ? "border border-white rounded-md" : ""}`}>
       {isEditing ? (
         <input
           className="bg-transparent text-xl pl-2 font-semibold text-white focus:outline-none h-[44px]"

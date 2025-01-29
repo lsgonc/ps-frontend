@@ -42,11 +42,23 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-10 flex justify-end bg-opacity-50">
-      <div className="w-[608px] border-l bg-background p-6 h-full shadow-lg">
+    <div className="fixed inset-0 z-10 flex justify-end bg-black bg-opacity-50">
+      <div className="w-[608px] border-l bg-background p-6 h-screen overflow-y-auto shadow-lg custom-scrollbar">
         <div className="flex justify-between mb-6">
           <CloseTaskButton onClose={onClose} />
-          <FinishTaskButton onFinish={() => onSave({ id: initialData?.id, title, description, priority, finishAt, listId: initialData?.listId || "" })} state="default" />
+          <FinishTaskButton
+            onFinish={() =>
+              onSave({
+                id: initialData?.id,
+                title,
+                description,
+                priority,
+                finishAt,
+                listId: initialData?.listId || "",
+              })
+            }
+            state="default"
+          />
         </div>
 
         {/* Editable Fields */}
@@ -60,7 +72,10 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
             className="w-full text-4xl font-bold rounded-md bg-transparent border-none text-white outline-none"
           />
         ) : (
-          <p onClick={() => setEditingField("title")} className="cursor-pointer text-white text-4xl font-bold rounded-md">
+          <p
+            onClick={() => setEditingField("title")}
+            className="cursor-pointer text-white text-4xl font-bold rounded-md"
+          >
             {title}
           </p>
         )}
@@ -79,7 +94,10 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
         ) : (
           <div className="flex items-center justify-between text-2xl mb-6">
             <h3 className="font-semibold">Data de conclusão</h3>
-            <p onClick={() => setEditingField("finishAt")} className="flex gap-3 items-center cursor-pointer text-white">
+            <p
+              onClick={() => setEditingField("finishAt")}
+              className="flex gap-3 items-center cursor-pointer text-white"
+            >
               <BsCalendarWeekFill className="text-white" />
               {new Date(finishAt).toLocaleDateString()}
             </p>
@@ -105,7 +123,10 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
           />
         ) : (
           <div className="flex">
-            <p onClick={() => setEditingField("description")} className="cursor-pointer text-white text-justify rounded-md p-[10px] w-full bg-transparent text-white border border-[#4E4E4E]">
+            <p
+              onClick={() => setEditingField("description")}
+              className="cursor-pointer text-white text-justify rounded-md p-[10px] w-full bg-transparent text-white border border-[#4E4E4E]"
+            >
               {description}
             </p>
           </div>

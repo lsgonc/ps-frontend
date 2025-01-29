@@ -12,7 +12,7 @@ import NotificationButton from "./NotificationButton";
 
 export default function Header()
 {
-    return <header className="bg-header-gradient border-b py-[12px] px-[80px] border-headerbordercolor mb-10  ">
+    return <header className="bg-header-gradient border-b py-[12px] px-[80px] border-headerbordercolor sm:mb-10  ">
         <div className="desktop-header sm:flex hidden flex justify-between">
             <div className="logo sm:flex gap-2 hidden">
                 <Image src="/peugeot-logo.png" alt="Logo da Peugeot" width={55} height={60}></Image>

@@ -72,14 +72,14 @@ export default function Home() {
   };
 
   return (
-    <div className="px-[80px] text-white">
-      <div className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 h-screen">
+    <div className="sm:px-[80px] px-[10px] text-white">
+      <div className="flex max-md:flex-col gap-2 overflow-y-auto md:overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800 h-screen">
         {lists.map((list: any) => (
           <div
             key={list.id}
             onDrop={(e) => handleDrop(e, list.id)}
             onDragOver={handleDragOver}
-            className="flex flex-col gap-4 border border-[#4E4E4E] pt-[16px] px-[16px] pb-[24px] rounded-md"
+            className="flex flex-col h-fit gap-4 border border-[#4E4E4E] pt-[16px] px-[16px] pb-[24px] rounded-md min-w-[460px]"
           >
             <ListTitle listId={list.id} listTitle={list.title} />
 

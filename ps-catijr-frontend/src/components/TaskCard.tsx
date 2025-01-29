@@ -97,6 +97,8 @@ export default function TaskCard({ date, priority, title, description, taskDate,
                 throw new Error("Failed to update the task");
             }
 
+            setIsOpen(false)
+
             mutate("http://localhost:3333/tasks");
         } catch (error) {
             console.error("Error updating task:", error);
@@ -156,7 +158,7 @@ export default function TaskCard({ date, priority, title, description, taskDate,
                 </div>
             </div>
 
-            {clicked && !taskIsFinished && (
+            {clicked && (
                 <div className="absolute bg-[#252628] text-white py-[8px] px-[4px] border border-[#4E4E4E] bottom-[-15] right-[-15]">
                     <ul className="flex flex-col gap-2">
                         <li onClick={() => setIsOpen(true)} className="flex gap-2 items-center p-1 cursor-pointer hover:bg-hoverbgcolor"><BsPencilFill></BsPencilFill> Editar</li>
