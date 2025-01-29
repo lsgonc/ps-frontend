@@ -30,6 +30,8 @@ export default function TaskCard({ date,priority,title,description,taskDate, isF
         x: 0,
         y: 0,
     });
+    const [notification, setNotification] = useState<string | null>(null); // State for notification message
+
     useEffect(() => {
         const handleClick = () => setClicked(false);
         window.addEventListener("click", handleClick);
@@ -114,11 +116,14 @@ export default function TaskCard({ date,priority,title,description,taskDate, isF
           if (!response.ok) {
             throw new Error("Failed to delete the task");
           }
-    
-          console.log("Task deleted successfully!");
-    
-          // Mutate SWR cache to refresh data
+          
+          setNotification("Task deletada com sucesso!"); // Show success message
           mutate("http://localhost:3333/tasks");
+        // Automatically hide the notification after 3 seconds
+        setTimeout(() => {
+            setNotification(null);
+        }, 3000);    
+          // Mutate SWR cache to refresh data
         } catch (error) {
           console.error("Task deleting list:", error);
         }
@@ -152,6 +157,7 @@ export default function TaskCard({ date,priority,title,description,taskDate, isF
             </div>
         </div>
 
+
         {clicked && !taskIsFinished && (
         <div className="absolute bg-[#252628] text-white py-[8px] px-[4px] border border-[#4E4E4E] bottom-[-15] right-[-15]">
           <ul className="flex flex-col gap-2">
@@ -159,6 +165,24 @@ export default function TaskCard({ date,priority,title,description,taskDate, isF
             <li className="flex gap-2 items-center p-1 cursor-pointer hover:bg-hoverbgcolor"><BsPlusSquareDotted></BsPlusSquareDotted> Duplicar</li>
             <li onClick={handleDeleteTask} className="flex gap-2 items-center text-danger p-1 cursor-pointer hover:bg-hoverbgcolor"><AiFillDelete></AiFillDelete> Deletar</li>
           </ul>
+        </div>
+      )}
+
+      {/* Notification div */}
+      {notification && (
+        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-[#4E4E4E] text-[#029008] py-1 px-4 rounded-xl flex items-center gap-6 border">
+          <div className="w-6 h-6 flex items-center justify-center bg-green-500 rounded-full text-black">
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+          <span>{notification}</span>
+          <button
+            onClick={() => setNotification(null)}
+            className="bg-transparent font-bold"
+          >
+            X
+          </button>
         </div>
       )}
 
