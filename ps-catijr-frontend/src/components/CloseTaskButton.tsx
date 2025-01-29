@@ -1,9 +1,12 @@
-import { BsArrowBarRight } from "react-icons/bs"
+import { BsArrowBarRight } from "react-icons/bs";
 
-
-export default function CloseTaskButton()
-{
-    return <div className="relative rounded-xl p-2 hover:bg-hoverbgcolor active:bg-clickedbgcolor"> 
-            <BsArrowBarRight className="cursor-pointer color-blue font-semibold  " color="white" size={28} />
-        </div>
+export default function CloseTaskButton({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      onClick={onClose}
+      className="cursor-pointer relative rounded-xl p-2 hover:bg-gray-700 active:bg-gray-600"
+    >
+      <BsArrowBarRight color="white" size={28} />
+    </div>
+  );
 }
