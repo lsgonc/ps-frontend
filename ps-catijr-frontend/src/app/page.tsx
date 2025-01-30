@@ -71,6 +71,10 @@ export default function Home() {
     e.preventDefault();
   };
 
+  var dateNow = new Date().toLocaleDateString()
+
+  console.log(dateNow)
+
   return (
     <div className="sm:px-[80px] px-[10px] text-white">
       <div className="flex max-md:flex-col gap-2 overflow-y-auto md:overflow-x-auto  h-screen">
@@ -88,7 +92,7 @@ export default function Home() {
               .map((task: any) => (
                 <TaskCard
                   key={task.id}
-                  date={task.finishAt <= Date.now() ? "onTime" : "late"}
+                  date={task.finishAt <= dateNow ? "onTime" : "late"}
                   priority={task.priority}
                   title={task.title}
                   description={task.description}

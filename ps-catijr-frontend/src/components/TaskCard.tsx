@@ -9,7 +9,7 @@ import Notification from "./Notification"
 import { BsPencilFill } from "react-icons/bs"
 import { BsPlusSquareDotted } from "react-icons/bs"
 import { AiFillDelete } from "react-icons/ai"
-import { mutate } from "swr"
+import useSWR, { mutate } from "swr"
 import TaskModal, { TaskData } from "./TaskModal"
 import useNotificationStore from "@/store/notificationStore"
 
@@ -26,6 +26,14 @@ interface Props {
     onDragEnd: () => void; // Add this prop
 }
 
+interface FileData {
+    id: string;
+    name: string;
+    url: string;
+  }
+
+
+
 export default function TaskCard({ date, priority, title, description, taskDate, isFinished, id, listId, onDragStart, onDragEnd }: Props) {
     const [clicked, setClicked] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +42,18 @@ export default function TaskCard({ date, priority, title, description, taskDate,
         y: 0,
     });
     const { showNotification } = useNotificationStore();
+    
+    const { data: attachedFiles, error, mutate } = useSWR<FileData[]>(
+        `http://localhost:3333/tasks/${id}/files`,
+        async (url:string) => {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error("Failed to fetch attached files");
+          }
+          const data = await response.json();
+          return Array.isArray(data) ? data : data.files || [];
+        }
+      );
 
     useEffect(() => {
         const handleClick = () => setClicked(false);
@@ -137,7 +157,7 @@ export default function TaskCard({ date, priority, title, description, taskDate,
                     y: e.pageY,
                 });
             }}
-            className="flex relative flex-col gap-2 border border-white py-[12px] px-[8px] max-w-[460px] hover:bg-taskcard-hover-gradient cursor-move" // Add cursor-move for better UX
+            className={`flex relative flex-col gap-2 border border-white py-[12px] px-[8px] max-w-[460px]  cursor-move ${date === 'late' ? 'hover:bg-taskcard-late-hover-gradient' : 'hover:bg-taskcard-hover-gradient'}`} // Add cursor-move for better UX
         >
             <div className="flex justify-between">
                 <PriorityTag priority={priority}></PriorityTag>
@@ -148,13 +168,13 @@ export default function TaskCard({ date, priority, title, description, taskDate,
                 <h3 className="text-white font-regular text-md">{description} </h3>
             </div>
             <div className="flex gap-2">
-                <div className="flex font-semibold items-center gap-2 w-fit py-[4px] px-[8px] rounded-md text-[#646570] bg-[#E0E0E0]">
+                <div className={`flex font-semibold items-center gap-2 w-fit py-[4px] px-[8px] rounded-md text-[#646570] bg-[#E0E0E0] ${date === 'late' ? 'bg-[#DDA9A9] text-danger' : ''}`}>
                     <BsCalendarWeekFill></BsCalendarWeekFill>
                     <span className="mt-0.5">{new Date(taskDate).toLocaleDateString()}</span>
                 </div>
                 <div className="flex font-semibold items-center gap-2 w-fit py-[4px] px-[8px] rounded-md text-white border border-[#4E4E4E]">
                     <AiOutlinePaperClip></AiOutlinePaperClip>
-                    <span className="mt-0.5">3 arquivos</span>
+                    <span className="mt-0.5">{attachedFiles?.length} arquivos</span>
                 </div>
             </div>
 

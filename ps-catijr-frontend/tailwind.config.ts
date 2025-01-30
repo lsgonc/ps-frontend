@@ -10,7 +10,8 @@ export default {
     extend: {
       backgroundImage: {
         'header-gradient': 'linear-gradient(90deg, #5b5b5b 0%, #4c4444 100%)',
-        'taskcard-hover-gradient': 'linear-gradient(258.85deg, #232323 0.2%, #393939 99.8%)'
+        'taskcard-hover-gradient': 'linear-gradient(258.85deg, #232323 0.2%, #393939 99.8%)',
+        'taskcard-late-hover-gradient': 'linear-gradient(258.85deg, #381D1D 0.2%, #553434 99.8%)'
       },
       colors: {
         background: "var(--background)",

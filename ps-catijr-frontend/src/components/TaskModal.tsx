@@ -4,6 +4,7 @@ import CloseTaskButton from "./CloseTaskButton";
 import FinishTaskButton from "./FinishTaskButton";
 import PriorityDropdown from "./PriorityDropdown";
 import { AiOutlinePaperClip } from "react-icons/ai";
+import useSWR from "swr";
 
 interface TaskModalProps {
   isOpen: boolean;
@@ -36,7 +37,6 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [attachedFiles, setAttachedFiles] = useState<FileData[]>([]);
 
   useEffect(() => {
     if (initialData) {
@@ -44,28 +44,20 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
       setDescription(initialData.description);
       setPriority(initialData.priority);
       setFinishAt(initialData.finishAt);
-      fetchAttachedFiles(initialData.id);
     }
   }, [initialData]);
 
-  const fetchAttachedFiles = async (taskId?: string) => {
-    if (!taskId) return;
-
-    try {
-      const response = await fetch(`http://localhost:3333/tasks/${taskId}/files`);
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Fetched files:", data);
-        // Ensure files is always an array
-        const files = Array.isArray(data) ? data : data.files || [];
-        setAttachedFiles(files);
-      } else {
-        console.error("Failed to fetch attached files");
+  const { data: attachedFiles, error, mutate } = useSWR<FileData[]>(
+    `http://localhost:3333/tasks/${initialData?.id}/files`,
+    async (url:string) => {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Failed to fetch attached files");
       }
-    } catch (err) {
-      console.error("Error fetching attached files:", err);
+      const data = await response.json();
+      return Array.isArray(data) ? data : data.files || [];
     }
-  };
+  );
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files ? e.target.files[0] : null;
@@ -96,8 +88,8 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
       if (response.ok) {
         const result = await response.json();
         console.log("File uploaded successfully:", result);
-        fetchAttachedFiles(initialData.id); // Refresh the list of attached files
-      } else {
+        mutate()
+    } else {
         const error = await response.json();
         setUploadError(error.message || "Erro ao enviar o arquivo.");
       }
@@ -128,8 +120,8 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
   
       if (response.ok) {
         // Refresh the list of attached files
-        fetchAttachedFiles(initialData.id);
-      } else {
+        mutate()
+    } else {
         console.error("Failed to delete file");
       }
     } catch (err) {
@@ -237,9 +229,9 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
           <h3 className="font-semibold text-2xl mb-3">Arquivos</h3>
           <div className="flex">
           {/* Display Attached Files */}
-            {attachedFiles.length > 0 ? (
+            {attachedFiles?.length > 0 ? (
                 <div className="flex cursor-pointer flex-wrap gap-4 h-3/4">
-                {attachedFiles.map((file) => (
+                {attachedFiles?.map((file) => (
                     <div key={file.id} className="flex mb-3 p-1 items-center gap-2  h-full text-white bg-transparent border border-[#4E4E4E] rounded-md">
                         <AiOutlinePaperClip size={24}></AiOutlinePaperClip>
                         <a
