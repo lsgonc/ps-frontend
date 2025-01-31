@@ -9,7 +9,7 @@ import Notification from "./Notification"
 import { BsPencilFill } from "react-icons/bs"
 import { BsPlusSquareDotted } from "react-icons/bs"
 import { AiFillDelete } from "react-icons/ai"
-import useSWR, { mutate } from "swr"
+import useSWR, { mutate, useSWRConfig } from "swr"
 import TaskModal, { TaskData } from "./TaskModal"
 import useNotificationStore from "@/store/notificationStore"
 
@@ -43,7 +43,9 @@ export default function TaskCard({ date, priority, title, description, taskDate,
     });
     const { showNotification } = useNotificationStore();
     
-    const { data: attachedFiles, error, mutate } = useSWR<FileData[]>(
+    const { mutate } = useSWRConfig()
+
+    const { data: attachedFiles, error } = useSWR<FileData[]>(
         `http://localhost:3333/tasks/${id}/files`,
         async (url:string) => {
           const response = await fetch(url);
@@ -125,6 +127,33 @@ export default function TaskCard({ date, priority, title, description, taskDate,
         }
     };
 
+    const handleDuplicateTask = async () => {
+      try {
+          const response = await fetch(`http://localhost:3333/tasks`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                  title,
+                  description,
+                  priority,
+                  finishAt: taskDate,
+                  listId,
+                  isFinished: false, // As duplicatas geralmente começam como "não concluídas"
+              }),
+          });
+  
+          if (!response.ok) {
+              throw new Error("Failed to duplicate the task");
+          }
+  
+          showNotification("Task duplicada com sucesso!");
+          mutate("http://localhost:3333/tasks"); // Atualize os dados para refletir a nova tarefa
+      } catch (error) {
+          console.error("Error duplicating task:", error);
+      }
+  };
+  
+
     const handleDeleteTask = async () => {
         try {
             const response = await fetch(`http://localhost:3333/tasks/${taskId}`, {
@@ -182,7 +211,7 @@ export default function TaskCard({ date, priority, title, description, taskDate,
                 <div className="absolute bg-[#252628] text-white py-[8px] px-[4px] border border-[#4E4E4E] bottom-[-15] right-[-15]">
                     <ul className="flex flex-col gap-2">
                         <li onClick={() => setIsOpen(true)} className="flex gap-2 items-center p-1 cursor-pointer hover:bg-hoverbgcolor"><BsPencilFill></BsPencilFill> Editar</li>
-                        <li className="flex gap-2 items-center p-1 cursor-pointer hover:bg-hoverbgcolor"><BsPlusSquareDotted></BsPlusSquareDotted> Duplicar</li>
+                        <li onClick={handleDuplicateTask} className="flex gap-2 items-center p-1 cursor-pointer hover:bg-hoverbgcolor"><BsPlusSquareDotted></BsPlusSquareDotted> Duplicar</li>
                         <li onClick={handleDeleteTask} className="flex gap-2 items-center text-danger p-1 cursor-pointer hover:bg-hoverbgcolor"><AiFillDelete></AiFillDelete> Deletar</li>
                     </ul>
                 </div>
