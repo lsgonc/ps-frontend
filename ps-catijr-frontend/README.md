@@ -1,25 +1,36 @@
-# O que foi feito para a entrega
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-# Lista de Tarefas
+## Getting Started
 
-## Funcionalidades
+First, run the development server:
 
-- ✅ Criar uma lista de tarefas  
-- ✅ Criar uma tarefa  
-- ✅ Editar informações de uma tarefa  
-- ✅ Remover uma lista  
-- ✅ Remover uma tarefa  
-- ✅ Mover uma tarefa para outra lista  
-- ✅ Responsividade  
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-## Milhas Extra
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- ✅ Drag and drop para mover uma tarefa para outra lista  
-- ✅ Anexar arquivos em uma tarefa, para disponibilizar o download do arquivo caso seja necessário  
-- ✅ Testes de interface com Cypress  
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Extras (além do que foi pedido)
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- ✅ Criação de endpoint no backend para listar arquivos referentes a uma lista
-- ✅ Criação de endpoint no backend para deletar arquivos de uma lista
-- ✅ Mecanismo para duplicar tasks
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
