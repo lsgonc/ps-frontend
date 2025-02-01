@@ -43,6 +43,7 @@ export default function NewTaskButton({ listId }: { listId: string }) {
   return (
     <>
       <div
+        data-testid="new-task-button"
         onClick={() => setIsOpen(true)}
         className="flex gap-2 items-center cursor-pointer hover:bg-gray-700 rounded-xl p-2 active:bg-gray-600 h-fit"
       >

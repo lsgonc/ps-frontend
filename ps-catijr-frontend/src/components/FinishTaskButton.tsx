@@ -9,7 +9,7 @@ export default function FinishTaskButton( {state='default',onFinish} : Props )
 {
     const isFinished = state === 'finished';
 
-    return <div onClick={onFinish} className={`flex gap-2 items-center group ${isFinished ? "text-hoverbggreen" : "text-white cursor-pointer"} h-fit`}>
+    return <div data-testid="save-task-button" onClick={onFinish} className={`flex gap-2 items-center group ${isFinished ? "text-hoverbggreen" : "text-white cursor-pointer"} h-fit`}>
             <div className={`rounded-full p-2 border border-dashed group-hover:border-hoverbggreen ${isFinished ? "border-hoverbggreen" : ""}`}>
                 <BsCheck2  className={`${isFinished ? "text-hoverbggreen" : "text-white"} group-hover:text-hoverbggreen`} size={24}  />
             </div>

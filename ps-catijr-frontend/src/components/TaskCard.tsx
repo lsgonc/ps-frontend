@@ -183,6 +183,7 @@ export default function TaskCard({
 
   return (
     <div
+      data-testid="task-card"
       draggable
       onDragStart={(e) => onDragStart(e, id)}
       onDragEnd={onDragEnd}
@@ -211,7 +212,7 @@ export default function TaskCard({
         ></FinishTaskButton>
       </div>
       <div className="flex flex-col">
-        <h2 className="font-semibold text-xl">{title}</h2>
+        <h2 data-testid="task-card-title"  className="font-semibold text-xl">{title}</h2>
         <h3 className="font-regular text-md">{description} </h3>
       </div>
       <div className="flex gap-2">
@@ -235,18 +236,21 @@ export default function TaskCard({
         <div className="absolute bg-[#252628] text-white py-[8px] px-[4px] border border-[#4E4E4E] bottom-[-15] right-[-15]">
           <ul className="flex flex-col gap-2">
             <li
+              data-testid="edit-task-button"
               onClick={() => setIsOpen(true)}
               className="flex gap-2 items-center p-1 cursor-pointer hover:bg-hoverbgcolor"
             >
               <BsPencilFill></BsPencilFill> Editar
             </li>
             <li
+              data-testid="duplicate-task-button"
               onClick={handleDuplicateTask}
               className="flex gap-2 items-center p-1 cursor-pointer hover:bg-hoverbgcolor"
             >
               <BsPlusSquareDotted></BsPlusSquareDotted> Duplicar
             </li>
             <li
+              data-testid="delete-task-button"
               onClick={handleDeleteTask}
               className="flex gap-2 items-center text-danger p-1 cursor-pointer hover:bg-hoverbgcolor"
             >

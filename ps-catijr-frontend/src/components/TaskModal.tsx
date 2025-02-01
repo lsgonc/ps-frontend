@@ -134,7 +134,7 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
 
 
   return (
-    <div className="fixed inset-0 z-10 flex justify-end bg-black bg-opacity-50 cursor-default">
+    <div data-testid="task-modal" className="fixed inset-0 z-10 flex justify-end bg-black bg-opacity-50 cursor-default">
       <div className="w-[608px] border-l bg-background p-6 h-screen overflow-y-auto shadow-lg custom-scrollbar">
         <div className="flex justify-between mb-6">
           <CloseTaskButton onClose={onClose} />
@@ -156,6 +156,7 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
         {/* Editable Fields */}
         {editingField === "title" ? (
           <input
+            data-testid="task-title-input"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -165,6 +166,7 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
           />
         ) : (
           <p
+            data-testid="task-title-text"
             onClick={() => setEditingField("title")}
             className="cursor-pointer text-white md:md:text-4xl text-2xl md:text-2xl text-xl font-bold rounded-md"
           >
@@ -207,6 +209,7 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
 
         {editingField === "description" ? (
           <textarea
+            data-testid="task-description-input"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             onBlur={() => setEditingField(null)}
@@ -216,6 +219,7 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
         ) : (
           <div className="flex">
             <p
+              data-testid="task-description-text"
               onClick={() => setEditingField("description")}
               className="cursor-pointer text-white text-justify rounded-md p-[10px] w-full bg-transparent text-white border border-[#4E4E4E]"
             >

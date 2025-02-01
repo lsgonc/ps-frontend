@@ -37,6 +37,7 @@ export default function ListOptionsButton({ onRename, id, listName }: any) {
   return (
     <div className="relative">
       <div
+        data-testid="list-options-button"
         onClick={() => setClicked(!clicked)}
         className="flex rounded-xl p-2 hover:bg-hoverbgcolor active:bg-clickedbgcolor items-center h-fit cursor-pointer"
       >
@@ -55,6 +56,7 @@ export default function ListOptionsButton({ onRename, id, listName }: any) {
               <BsPencilFill /> Renomear
             </li>
             <li
+              data-testid="list-options-delete-button"
               onClick={() => setShowModal(true)}
               className="flex gap-2 items-center text-danger p-1 cursor-pointer hover:bg-hoverbgcolor"
             >
@@ -78,6 +80,7 @@ export default function ListOptionsButton({ onRename, id, listName }: any) {
             <div className="flex justify-start ">
             
               <button
+                data-testid="list-options-confirm-delete-button"
                 onClick={deleteList}
                 className="flex flex-1 rounded-md gap-2 items-center text-danger p-1 cursor-pointer hover:bg-hoverbgcolor"
               >

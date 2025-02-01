@@ -40,9 +40,12 @@ export default function NewListButton() {
   };
 
   return (
-    <div className={`flex relative text-white cursor-pointer justify-between min-w-[300px] active:bg-clickedbgcolor hover:bg-hoverbgcolor  items-center h-fit ${isEditing ? "border border-white rounded-md" : ""}`}>
+    <div data-testid="new-list-button"
+          onClick={() => setIsEditing(true)}
+          className={`flex relative text-white cursor-pointer justify-between min-w-[300px] active:bg-clickedbgcolor hover:bg-hoverbgcolor  items-center h-fit ${isEditing ? "border border-white rounded-md" : ""}`}>
       {isEditing ? (
         <input
+          data-testid="list-title-input"
           type="text"
           className="bg-transparent text-xl pl-2 font-semibold text-white focus:outline-none h-[44px]"
           value={inputValue}
@@ -54,7 +57,6 @@ export default function NewListButton() {
       ) : (
         <div
           className="flex gap-2 items-center rounded-xl p-2 "
-          onClick={() => setIsEditing(true)}
         >
           <BsFillPlusCircleFill color="white" size={36} />
           <h3 className="text-white">Nova lista</h3>

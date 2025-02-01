@@ -79,7 +79,8 @@ export default function Home() {
     <div className="sm:px-[80px] px-[10px] text-white">
       <div className="flex max-md:flex-col gap-2 overflow-y-auto md:overflow-x-auto  h-screen">
         {lists.map((list: any) => (
-          <div
+          <div  
+            data-testid="list-container"
             key={list.id}
             onDrop={(e) => handleDrop(e, list.id)}
             onDragOver={handleDragOver}
