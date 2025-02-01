@@ -27,7 +27,7 @@ export default function RootLayout({
       <body
         className={`${poppinsFont.variable} antialiased`}
       >
-        <div className="min-h-screen flex flex-col justify-bewteen">
+        <div className="min-h-screen flex flex-col justify-bewteen max-sm:mt-4">
           <Notification /> {/* Render the notification globally */}
           <div className="sm:block hidden">
             <Header></Header>

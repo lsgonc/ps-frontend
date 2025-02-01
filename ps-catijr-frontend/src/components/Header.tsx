@@ -27,9 +27,9 @@ export default function Header()
 
         <div className="mobile-header sm:hidden max-sm:sticky">
             <div className="flex gap-6 items-center justify-between">
-                <IoMdHome className="cursor-pointer" size={36} color="white" />
-                <BsBellFill className="cursor-pointer color-blue font-semibold" color="white" size={28} />
-                <IoMdPerson className="cursor-pointer" color="white" size={36}  />
+                <IoMdHome className="cursor-pointer text-white hover:text-[#646570] active:bg-clickedbgcolor" size={36} />
+                <BsBellFill className="cursor-pointer text-white hover:text-[#646570] active:bg-clickedbgcolor" size={28} />
+                <IoMdPerson className="cursor-pointer text-white hover:text-[#646570] active:bg-clickedbgcolor" size={36}  />
             </div>
         </div>
     </header>
