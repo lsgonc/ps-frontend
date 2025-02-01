@@ -31,7 +31,7 @@
 
 Primeiro, rodar o backend: 
 
-1. Entrar na pasta do backend: `cd ps-backend`
+1. Entrar na pasta do backend: `cd case-cati-banco-de-talentos-2025`
 2. Baixar as dependências: `npm install`
 3. Criar pasta .tmp na raiz do projeto: `mkdir .tmp`
 4. Rodar as migrations do prisma: `npx prisma migrate dev`
