@@ -20,9 +20,9 @@ export default function PriorityDropdown({ priority, onChange }: Props) {
 
   return (
     <div className="relative inline-block text-left">
-      <div onClick={() => setIsOpen(!isOpen)} className="bg-transparent cursor-pointer py-[4px] px-[8px] flex items-center gap-6 rounded-md border border-[#4E4E4E]">
+      <div onClick={() => setIsOpen(!isOpen)} className="bg-transparent cursor-pointer py-[6px] px-[8px] flex items-center gap-6 rounded-md border border-[#4E4E4E]">
         <button
-        className={`flex justify-between items-center w-full p-2 rounded-md  ${selectedPriority?.color} cursor-pointer`}
+        className={`flex justify-between items-center w-full md:p-2 px-1 rounded-md  ${selectedPriority?.color} cursor-pointer`}
         >
         {selectedPriority?.label}
         </button>

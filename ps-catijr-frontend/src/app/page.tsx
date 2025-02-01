@@ -71,7 +71,7 @@ export default function Home() {
     e.preventDefault();
   };
 
-  var dateNow = new Date().toLocaleDateString()
+  var dateNow = new Date().toISOString().split("T")[0]
 
   console.log(dateNow)
 
@@ -92,7 +92,7 @@ export default function Home() {
               .map((task: any) => (
                 <TaskCard
                   key={task.id}
-                  date={task.finishAt <= dateNow ? "onTime" : "late"}
+                  date={task.finishAt >= dateNow ? "onTime" : "late"}
                   priority={task.priority}
                   title={task.title}
                   description={task.description}

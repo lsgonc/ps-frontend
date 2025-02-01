@@ -43,9 +43,10 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
       setTitle(initialData.title);
       setDescription(initialData.description);
       setPriority(initialData.priority);
-      setFinishAt(initialData.finishAt);
+      setFinishAt(initialData.finishAt ? new Date(initialData.finishAt).toISOString().split("T")[0] : "2024-12-31");
     }
   }, [initialData]);
+  
 
   const { data: attachedFiles, error, mutate } = useSWR<FileData[]>(
     `http://localhost:3333/tasks/${initialData?.id}/files`,
@@ -160,12 +161,12 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
             onChange={(e) => setTitle(e.target.value)}
             onBlur={() => setEditingField(null)}
             autoFocus
-            className="w-full text-4xl font-bold rounded-md bg-transparent border-none text-white outline-none"
+            className="w-full md:md:text-4xl text-2xl md:text-2xl text-xl font-bold rounded-md bg-transparent border-none text-white outline-none"
           />
         ) : (
           <p
             onClick={() => setEditingField("title")}
-            className="cursor-pointer text-white text-4xl font-bold rounded-md"
+            className="cursor-pointer text-white md:md:text-4xl text-2xl md:text-2xl text-xl font-bold rounded-md"
           >
             {title}
           </p>
@@ -177,13 +178,13 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
           <input
             type="date"
             value={finishAt}
-            onChange={(e) => setFinishAt(e.target.value)}
+            onChange={(e) => setFinishAt(new Date(e.target.value).toISOString().split("T")[0])}
             onBlur={() => setEditingField(null)}
             autoFocus
             className="w-full p-2 mb-3 rounded-md text-white bg-transparent border border-white"
           />
         ) : (
-          <div className="flex items-center justify-between text-2xl mb-6">
+          <div className="flex items-center justify-between md:text-2xl text-xl mb-6">
             <h3 className="font-semibold">Data de conclusão</h3>
             <p
               onClick={() => setEditingField("finishAt")}
@@ -195,14 +196,14 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
           </div>
         )}
 
-        <div className="flex items-center justify-between text-2xl">
+        <div className="flex items-center justify-between md:text-2xl text-xl">
           <h3 className="font-semibold">Prioridade</h3>
           <PriorityDropdown priority={priority} onChange={setPriority} />
         </div>
 
         <hr className="my-6 border-[#4E4E4E]" />
 
-        <h3 className="font-semibold text-2xl mb-2">Descrição</h3>
+        <h3 className="font-semibold md:text-2xl text-xl mb-2">Descrição</h3>
 
         {editingField === "description" ? (
           <textarea
@@ -226,7 +227,7 @@ export default function TaskModal({ isOpen, onClose, onSave, initialData }: Task
         {/* File Upload Section */}
         <hr className="my-6 border-[#4E4E4E]" />
         <div className="flex flex-col items-start">
-          <h3 className="font-semibold text-2xl mb-3">Arquivos</h3>
+          <h3 className="font-semibold md:text-2xl text-xl mb-3">Arquivos</h3>
           <div className="flex">
           {/* Display Attached Files */}
             {attachedFiles?.length > 0 ? (

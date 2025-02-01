@@ -20,7 +20,7 @@ export default function Notification() {
     if (!message) return null;
 
     return (
-        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-[#4E4E4E] text-[#029008] py-1 px-4 rounded-xl flex items-center gap-6 border">
+        <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-[#4E4E4E] text-[#029008] py-1 px-4 rounded-xl flex items-center gap-6 border z-50">
             <div className="w-6 h-6 flex items-center justify-center bg-green-500 rounded-full text-black">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
